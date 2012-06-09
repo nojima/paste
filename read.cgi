@@ -24,7 +24,7 @@ if cgi.request_method and cgi.request_method != "GET"
 end
 
 id = File.basename(cgi.path_info, '.txt')
-db = SQLite3::Database.new('paste.db')
+db = SQLite3::Database.new('db/paste.sqlite3')
 text = db.get_first_value('SELECT text FROM Texts WHERE id = ?', id)
 
 if text
