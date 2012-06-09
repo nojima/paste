@@ -20,12 +20,11 @@ end
 text = cgi['text']
 id = Digest::SHA1.hexdigest(text)
 
+db = SQLite3::Database.new('db/paste.sqlite3')
 begin
-  db = SQLite3::Database.new('db/paste.sqlite3')
   db.execute("INSERT INTO Texts (id, text) VALUES (?, ?)", [id, text])
 rescue SQLite3::SQLException => e
-  puts cgi.header
-  puts e.to_s
+  # ignore SQL errors
 end
 
 cgi.out('status' => 'REDIRECT', 'type' => 'text/html', 'location' => "#{id}.txt") do
