@@ -1,0 +1,4 @@
+AddType application/x-httpd-cgi .cgi
+RewriteEngine On
+RewriteBase /paste
+RewriteRule ^(.+)\.txt$ read.cgi/$1

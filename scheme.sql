@@ -1,0 +1,4 @@
+CREATE TABLE Texts (
+  id TEXT PRIMARY KEY,
+  text TEXT NOT NULL
+);
