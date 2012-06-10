@@ -8,6 +8,16 @@
     <h1>Paste</h1>
     <form method="POST" action="new.cgi">
       <p>
+        <label for="type">ファイルタイプ:</label>
+        <select name="type">
+          <% for type in SupportedFileTypes %>
+            <option value="<%= type %>" <%= type == DefaultFileType ? "selected" : ""%>>
+              <%= type %>
+            </option>
+          <% end %>
+        </select>
+      </p>
+      <p>
         <label for="text">投稿するテキスト:</label><br />
         <textarea name="text" rows="40" cols="80"></textarea>
       </p>

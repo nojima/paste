@@ -1,4 +1,5 @@
 AddType application/x-httpd-cgi .cgi
+DirectoryIndex new.cgi
 RewriteEngine On
 RewriteBase /paste
-RewriteRule ^[^/]+\.txt$ read.cgi/$0
+RewriteRule ^[0-9a-f]{40}\.[0-9a-z]+$ read.cgi/$0

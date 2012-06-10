@@ -1,14 +1,15 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 require 'cgi'
+require 'erb'
 require 'sqlite3'
 require './lib/common.rb'
 
-def read_text(id, cgi)
+def read_record(id, cgi)
   db = SQLite3::Database.new('db/paste.sqlite3')
   10.times do
     begin
-      return db.get_first_value('SELECT text FROM Texts WHERE id = ?', id)
+      return db.get_first_row('SELECT type, text FROM Texts WHERE id = ?', id)
     rescue SQLite3::BusyException
       sleep 0.5
     end
@@ -16,17 +17,40 @@ def read_text(id, cgi)
   service_unavailable(cgi)
 end
 
-cgi = CGI.new
-
-if cgi.request_method and cgi.request_method != "GET"
-  method_not_allowed(cgi)
+def render(id, type, text, cgi)
+  case type
+  when '.txt'
+    cgi.out('type' => 'text/plain; charset=utf-8') { text }
+  when '.tex'
+    erb = ERB.new(IO.read('./view/mathjax.html.erb'))
+    cgi.out('type' => 'text/html; charset=utf-8') {
+      include ERB::Util
+      erb.result(binding)
+    }
+  end
 end
 
-id = File.basename(cgi.path_info, '.txt')
-text = read_text(id, cgi)
+cgi = CGI.new
 
-if text
-  cgi.out('type' => 'text/plain; charset=utf-8') { text }
+case cgi.request_method
+when 'GET'
+  type = File.extname(cgi.path_info)
+  id = File.basename(cgi.path_info, type)
+  record = read_record(id, cgi)
+
+  if record and (type == record[0] or type == '.txt')
+    render(id, type, record[1], cgi)
+  else
+    not_found(cgi)
+  end
+when 'POST':
+  type = cgi['type']
+  text = cgi['text']
+  if SupportedFileTypes.include?(type)
+    render('Preview', type, text, cgi)
+  else
+    bad_request
+  end
 else
-  not_found(cgi)
+  method_not_allowed(cgi)
 end
