@@ -6,14 +6,14 @@ require 'digest/sha1'
 
 def method_not_allowed(cgi)
   cgi.out('status' => 'MOTHOD_NOT_ALLOWED', 'type' => 'text/html') do
-    "<title>Paste</title><h2>405 Method Not Allowed</h2>"
+    "<title>Paste</title><h1>405 Method Not Allowed</h1>"
   end
   exit
 end
 
 def service_unavailable(cgi)
   cgi.out('status' => 'SERVICE_UNAVAILABLE', 'type' => 'text/html') do
-    "<title>Paste</title><h2>503 Service Unavailable</h2>"
+    "<title>Paste</title><h1>503 Service Unavailable</h1>"
   end
   exit
 end
@@ -46,5 +46,5 @@ id = Digest::SHA1.hexdigest(text)
 save_text(id, text, cgi)
 
 cgi.out('status' => 'REDIRECT', 'type' => 'text/html', 'location' => "#{id}.txt") do
-  "<title>Paste</title><h2>Submitted</h2>"
+  "<title>Paste</title><h1>Submitted</h1>"
 end
