@@ -28,7 +28,7 @@ db = SQLite3::Database.new('db/paste.sqlite3')
 text = db.get_first_value('SELECT text FROM Texts WHERE id = ?', id)
 
 if text
-  cgi.out('type' => 'text/plain') { text }
+  cgi.out('type' => 'text/plain; charset=utf-8') { text }
 else
   not_found(cgi)
 end
