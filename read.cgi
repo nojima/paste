@@ -21,7 +21,7 @@ def render(id, type, text, cgi)
   case type
   when '.txt'
     cgi.out('type' => 'text/plain; charset=utf-8') { text }
-  when '.tex'
+  when '.mathjax'
     erb = ERB.new(IO.read('./view/mathjax.html.erb'))
     cgi.out('type' => 'text/html; charset=utf-8') {
       include ERB::Util

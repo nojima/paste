@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
-SupportedFileTypes = %w(.txt .tex)
+SupportedFileTypes = %w(.txt .mathjax)
 DefaultFileType = '.txt'
 
 def method_not_allowed(cgi)
